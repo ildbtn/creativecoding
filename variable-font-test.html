@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable Font Test</title>
+    <link rel="stylesheet" href="https://use.typekit.net/vix7tam.css"> <!-- Adobe Fonts embed code -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ff4600; /* Orange background */
+            font-family: "cofo-gothic-variable", sans-serif; /* Use the Adobe Font */
+            overflow: hidden;
+        }
+
+        #main-text {
+            font-size: 30vmin; /* Scale text to approximately 30% of viewport width */
+            font-variation-settings: "wght" 100; /* Lightest weight */
+            color: black;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: -0.05em; /* Adjust tracking to -5 */
+            white-space: nowrap; /* Prevent text from wrapping */
+        }
+    </style>
+</head>
+<body>
+    <h1 id="main-text">ILOVEDUST</h1>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainTextElement = document.getElementById('main-text');
+            const numLetters = mainTextElement.textContent.length;
+            const verticalSegments = numLetters * 10; // Each letter is assigned a segment of 10
+
+            document.addEventListener('mousemove', onMouseMove, false);
+
+            function onMouseMove(event) {
+                const hoverX = event.clientX / window.innerWidth;
+                const hoverY = event.clientY / window.innerHeight;
+
+                // Change font weight based on horizontal position
+                const weight = 100 + (800 * hoverX);
+                mainTextElement.style.fontVariationSettings = `"wght" ${weight}`;
+
+                // Change italics based on vertical position
+                const text = mainTextElement.textContent;
+                const newText = adjustItalics(text, hoverY);
+                mainTextElement.innerHTML = newText;
+            }
+
+            function adjustItalics(text, hoverY) {
+                const chars = text.split('');
+                const segmentSize = 1 / numLetters; // Each segment represents one letter
+                const segmentIndex = Math.floor(hoverY * verticalSegments);
+                return chars.map((char, index) => {
+                    const italicProbability = Math.abs(index * 10 - segmentIndex) <= 10 ? 1 : 0;
+                    return (italicProbability === 1) ? `<span style="font-style: italic;">${char}</span>` : char;
+                }).join('');
+            }
+        });
+    </script>
+</body>
+</html>
